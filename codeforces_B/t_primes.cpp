@@ -1,11 +1,21 @@
 #include <iostream>
 #include <stdint.h>
+#include <cmath>
+#include <limits>
+
 using namespace std;
+
+void sieve(bool*);
 
 int main(int argc, char const *argv[])
 {
 	int n=0;
 	cin>>n;
+
+	bool notPrime[1000005] = {false};
+	notPrime[0]=true;
+	notPrime[1]=true;
+	sieve(notPrime);
 
 	uint64_t* arr;
 	arr = new uint64_t[n];
@@ -15,23 +25,32 @@ int main(int argc, char const *argv[])
 		cin>>arr[j];
 	}
 
-	for(int i=0;i<n;i++)
+	for(int k=0;k<n;k++)
 	{
-		uint64_t var = 1;
-		int div_count = 0;
-		while(1)
+		int mid_n = sqrt(arr[k]);
+		//cout<<mid_n<<",";
+		if(mid_n==sqrt(arr[k]))
 		{
-			if(arr[i]%var==0) div_count++;
-			if(div_count==2) break;
-			var++;
+			//mid_n = static_cast<int>(mid_n);
+			if(!notPrime[mid_n]) cout<<"YES"<<endl;
+			else cout<<"NO"<<endl;
 		}
-
-		if(var*var==arr[i]) cout<<"YES"<<endl;
-		else
-		{
-			cout<<"NO"<<endl;
-		}
+		else cout<<"NO"<<endl;
 	}
 
+	//cout<<std::numeric_limits<double>::epsilon()<<endl;
+
 	return 0;
+}
+
+void sieve(bool* arr)
+{
+	for(int j=2;j<1000;j++)
+	{
+		if(!arr[j])
+		{
+			for(int k=j*j;k<1000005;k+=j)
+				arr[k]=true;
+		}
+	}
 }
